@@ -26,8 +26,10 @@ class PriceResource extends Resource
         return $form
             ->schema([
                 TextInput::make('price')
-                    ->label('Price (/Kg)')
-                    ->placeholder('Price /Kg')
+                    ->label('Price')
+                    ->placeholder('Price')
+                    ->prefix("Rp. ")
+                    ->suffix('/Kg')
                     ->numeric()
                     ->required()
                     ->maxLength(20),
@@ -38,7 +40,8 @@ class PriceResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('price')->formatStateUsing(fn (string $state): string => __("Rp.{{number_format($state,0,',','.')}}")),
+                TextColumn::make('price')->formatStateUsing(fn (string $state): string => "Rp. " . number_format($state, 0, ',', '.') . "/Kg"),
+                TextColumn::make('updated_at')->formatStateUsing(fn (string $state): string => Date($state))->label('Latest Updated At'),
             ])
             ->filters([
                 //
