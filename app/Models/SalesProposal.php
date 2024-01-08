@@ -16,11 +16,17 @@ class SalesProposal extends Model
     protected $fillable = [
         'weight',
         'user_id',
-        'total'
+        'total',
+        'price'
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    public function history()
+    {
+        return $this->hasOne(HistorySales::class, 'sale_id', 'id');
     }
 }

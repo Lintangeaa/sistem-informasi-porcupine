@@ -7,6 +7,7 @@ use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Navigation\NavigationItem;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -21,7 +22,18 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
+
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+    public static function getNavigationItems(): array
+    {
+        return [
+            NavigationItem::make('User')
+            ->icon('heroicon-o-user')
+            ->url(UserResource::getUrl())
+            ->visible(auth()->user()->role == "admin")
+        ];
+    }
 
     public static function getEloquentQuery(): Builder
     {

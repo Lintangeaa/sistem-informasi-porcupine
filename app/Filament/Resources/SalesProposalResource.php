@@ -4,8 +4,10 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\SalesProposalResource\Pages;
 use App\Filament\Resources\SalesProposalResource\RelationManagers;
+use App\Models\HistorySales;
 use App\Models\SalesProposal;
 use Filament\Forms;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -14,14 +16,15 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Illuminate\Database\Eloquent\Model;
+use Filament\Pages\Actions;
 
 class SalesProposalResource extends Resource
 {
-    protected static ?string $model = SalesProposal::class;
 
-    protected static ?string $title = 'Pengajuan Penjualan';
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $model = SalesProposal::class;
+    protected static ?string $navigationLabel = "Pengajuan Penjualan";
+
+    protected static ?string $navigationIcon = 'heroicon-s-document-chart-bar';
 
     public static function form(Form $form): Form
     {
@@ -29,44 +32,54 @@ class SalesProposalResource extends Resource
             ->schema([
                 TextInput::make('weight')
                     ->label('Berat')
-                    ->placeholder('20')
+                    ->suffix("/Kg")
+                    ->placeholder("20")
+                    ->reactive()
+                    ->numeric()
+                    ->afterStateUpdated(fn ($state, callable $set) => $set('total', $state * \App\Models\Price::all()->first()->price) ?? 1)
+                    ->required(),
+                TextInput::make('price')
+                    ->label('Harga Saat Ini')
+                    ->default(\App\Models\Price::all()->first()->price ?? 1)
                     ->numeric()
                     ->suffix('/Kg')
-                    ->required(),
-
+                    ->readOnly(),
+                TextInput::make('total')
+                    ->prefix('Rp. ')
+                    ->label('Total Penjualan')
+                    ->default(0)
+                    ->numeric()
+                    ->readOnly(),
             ]);
     }
-
-    protected function getCreatedNotificationTitle(): ?string
-    {
-        return 'Berhasil mengajukan penjualan';
-    }
-
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                TextColumn::make('weight'),
-                TextColumn::make('total'),
+                TextColumn::make('weight')
+                    ->label('Berat')
+                    ->formatStateUsing(fn (string $state): string => number_format($state, 0, ',', '.') . "Kg"),
+                TextColumn::make('price')
+                    ->label('Harga')
+                    ->formatStateUsing(fn (string $state): string => "Rp. " . number_format($state, 0, ',', '.') . " /Kg"),
+                TextColumn::make('total')
+                    ->formatStateUsing(fn (string $state): string => "Rp. " . number_format($state, 0, ',', '.')),
+                TextColumn::make('created_at')->formatStateUsing(fn (string $state): string => Date($state))->label('Di Ajukan Pada'),
             ])
             ->filters([
                 //
             ])
-            ->headerActions([
-                Tables\Actions\CreateAction::make()->mutateFormDataUsing(function (array $array) {
-                    return dd($array);
-                }),
-
-            ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make(),
+                Tables\Actions\EditAction::make()->hidden(fn($record) => HistorySales::where('sale_id', $record->id)->first() != null),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
+
     }
 
     public static function getRelations(): array
@@ -81,7 +94,9 @@ class SalesProposalResource extends Resource
         return [
             'index' => Pages\ListSalesProposals::route('/'),
             'create' => Pages\CreateSalesProposal::route('/create'),
+            'view' => Pages\ViewSalesProposal::route('/{record}'),
             'edit' => Pages\EditSalesProposal::route('/{record}/edit'),
         ];
     }
+
 }
