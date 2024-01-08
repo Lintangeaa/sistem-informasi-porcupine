@@ -7,6 +7,7 @@ use App\Filament\Resources\PriceResource\RelationManagers;
 use App\Models\Price;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Navigation\NavigationItem;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -18,9 +19,15 @@ use Filament\Forms\Components\TextInput;
 class PriceResource extends Resource
 {
     protected static ?string $model = Price::class;
-
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
+    public static function getNavigationItems(): array
+    {
+        return [
+            NavigationItem::make('Harga')
+                ->icon('heroicon-o-currency-dollar')
+                ->url(PriceResource::getUrl())
+                ->visible(auth()->user()->role == "admin")
+        ];
+    }
     public static function form(Form $form): Form
     {
         return $form
