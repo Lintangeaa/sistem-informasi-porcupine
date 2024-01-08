@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id')->nullable(false);
             $table->bigInteger('weight')->nullable(false);
+            $table->bigInteger('price')->nullable(false);
             $table->bigInteger('total')->nullable(false);
             $table->timestamps();
 
