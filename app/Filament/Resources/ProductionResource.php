@@ -26,8 +26,14 @@ class ProductionResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('weight')
-                    ->label('Berat')
+                TextInput::make('raw_weight')
+                    ->label('Berat Bahan')
+                    ->suffix("/Kg")
+                    ->placeholder("20")
+                    ->numeric()
+                    ->required(),
+                TextInput::make('produced_weight')
+                    ->label('Berat Bahan')
                     ->suffix("/Kg")
                     ->placeholder("20")
                     ->numeric()
@@ -46,12 +52,17 @@ class ProductionResource extends Resource
                 ->visible(auth()->user()->role == "admin")
         ];
     }
+
+
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                TextColumn::make('weight')
-                    ->label('Berat')
+                TextColumn::make('raw_weight')
+                    ->label('Berat Bahan')
+                    ->formatStateUsing(fn (string $state): string => number_format($state, 0, ',', '.') . "Kg"),
+                TextColumn::make('produced_weight')
+                    ->label('Berat Hasil Produksi')
                     ->formatStateUsing(fn (string $state): string => number_format($state, 0, ',', '.') . "Kg"),
                 TextColumn::make('produced_at')
                     ->formatStateUsing(fn (string $state): string => Date($state))

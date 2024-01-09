@@ -2,10 +2,12 @@
 
 namespace App\Filament\Resources\SalesProposalResource\Pages;
 
+use App\Filament\Resources\HistorySalesResource;
 use App\Filament\Resources\SalesProposalResource;
 use App\Models\Price;
 use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
+use Illuminate\Database\Eloquent\Model;
 
 class CreateSalesProposal extends CreateRecord
 {
@@ -16,4 +18,5 @@ class CreateSalesProposal extends CreateRecord
         $data['user_id'] = auth()->user()->id;
         return $data;
     }
+
 }

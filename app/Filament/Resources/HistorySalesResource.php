@@ -20,7 +20,6 @@ class HistorySalesResource extends Resource
 {
     protected static ?string $model = HistorySales::class;
     protected static ?string $navigationLabel = "History Penjualan";
-
     protected static ?string $navigationIcon = 'heroicon-m-banknotes';
 
     public static function form(Form $form): Form

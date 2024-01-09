@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('productions', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id')->nullable(false);
-            $table->bigInteger('weight')->nullable(false);
+            $table->bigInteger('raw_weight')->nullable(false);
+            $table->bigInteger('produced_weight')->nullable(false);
             $table->dateTime('produced_at')->nullable(false);
             $table->timestamps();
 

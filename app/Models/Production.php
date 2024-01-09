@@ -15,7 +15,8 @@ class Production extends Model
     public $timestamps = true;
     public  $incrementing = true;
     protected $fillable = [
-        'weight',
+        'raw_weight',
+        'produced_weight',
         'user_id',
         'produced_at'
     ];

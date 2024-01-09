@@ -29,9 +29,11 @@ class EditSalesProposal extends EditRecord
                     $data['sale_id'] = $this->data['id'];
                     $data['user_id'] = $this->data['user_id'];
                     HistorySales::create($data);
-                    return $data;
+                    
                 })
                 ->hidden(fn($record) => HistorySales::where('sale_id', $record->id)->first() != null || auth()->user()->role == "vendor")
+                ->successNotificationTitle('Success ya')
+                ->failureNotificationTitle('Failure ya')
                 ->label('Approval')
                 ->modalHeading('Approval Pengajuan Penjualan')
                 ->form(function($record) {
