@@ -36,7 +36,7 @@ class SalesProposalResource extends Resource
                     ->placeholder("20")
                     ->reactive()
                     ->numeric()
-                    ->afterStateUpdated(fn ($state, callable $set) => $set('total', $state * \App\Models\Price::all()->first()->price) ?? 1)
+                    ->afterStateUpdated(fn ($state, callable $set) => $set('total', $state * \App\Models\Price::all()->first()->price  ?? 1))
                     ->required(),
                 TextInput::make('price')
                     ->label('Harga Saat Ini')

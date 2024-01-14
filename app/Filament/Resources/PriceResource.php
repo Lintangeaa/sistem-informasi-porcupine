@@ -26,6 +26,8 @@ class PriceResource extends Resource
                 ->icon('heroicon-o-currency-dollar')
                 ->url(PriceResource::getUrl())
                 ->visible(auth()->user()->role == "admin")
+                ->activeIcon('heroicon-o-currency-dollar')
+                ->isActiveWhen(fn (): bool => request()->url() == PriceResource::getUrl())
         ];
     }
     public static function form(Form $form): Form

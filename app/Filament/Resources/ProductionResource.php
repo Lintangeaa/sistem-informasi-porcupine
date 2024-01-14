@@ -50,6 +50,7 @@ class ProductionResource extends Resource
                 ->icon('heroicon-o-scale')
                 ->url(ProductionResource::getUrl())
                 ->visible(auth()->user()->role == "admin")
+                ->isActiveWhen(fn (): bool => request()->url() == ProductionResource::getUrl())
         ];
     }
 

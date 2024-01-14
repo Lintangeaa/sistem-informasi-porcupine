@@ -32,6 +32,7 @@ class UserResource extends Resource
             ->icon('heroicon-o-user')
             ->url(UserResource::getUrl())
             ->visible(auth()->user()->role == "admin")
+            ->isActiveWhen(fn (): bool => request()->url() == UserResource::getUrl())
         ];
     }
 
