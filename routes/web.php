@@ -14,5 +14,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return redirect('/app');
+    // return redirect('/app/login');
+    return view('welcome');
 });

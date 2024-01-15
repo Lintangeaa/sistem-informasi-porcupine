@@ -39,30 +39,14 @@ class AdminPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Amber,
             ])
+            ->brandName('Porcupine')
+
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
-//            ->pages([
-//                Pages\Dashboard::class,
-//            ])
-            
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
-//                Widgets\AccountWidget::class,
                 HistorySalesResource\Widgets\Stats::class,
             ])
-//->navigation(function (NavigationBuilder $builder): NavigationBuilder {
-//    return $builder->items([
-//        NavigationItem::make('Dashboard')
-//            ->icon('heroicon-o-home')
-//            ->isActiveWhen(fn (): bool => request()->routeIs('filament.admin.pages.dashboard'))
-//            ->url(fn (): string => Dashboard::getUrl()),
-//        ...UserResource::getNavigationItems(),
-//        ...ProductionResource::getNavigationItems(),
-//        ...SalesProposalResource::getNavigationItems(),
-//        ...PriceResource::getNavigationItems(),
-//        ...HistorySalesResource::getNavigationItems()
-//    ]);
-//})
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
