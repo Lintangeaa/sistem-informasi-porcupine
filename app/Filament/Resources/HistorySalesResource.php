@@ -24,6 +24,11 @@ class HistorySalesResource extends Resource
 
     public static function form(Form $form): Form
     {
+        $prices = \App\Models\Price::all();
+        $price = 0;
+        if($prices->count() == 1){
+            $price = $prices->first()->price;
+        }
         return $form
             ->schema([
                 TextInput::make('accepted_weight')
@@ -31,7 +36,7 @@ class HistorySalesResource extends Resource
                     ->suffix("/Kg")
                     ->placeholder("20")
                     ->reactive()
-                    ->afterStateUpdated(fn ($state, callable $set) => $set('accepted_total', $state * \App\Models\Price::all()->first()->price) ?? 1)
+                    ->afterStateUpdated(fn ($state, callable $set) => $set('accepted_total', $price))
                     ->numeric(),
                 TextInput::make('accepted_price')
                     ->label('Harga Saat Ini')

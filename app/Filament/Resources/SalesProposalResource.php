@@ -28,6 +28,11 @@ class SalesProposalResource extends Resource
 
     public static function form(Form $form): Form
     {
+        $prices = \App\Models\Price::all();
+        $price = 0;
+        if($prices->count() == 1){
+            $price = $prices->first()->price;
+        }
         return $form
             ->schema([
                 TextInput::make('weight')
@@ -36,11 +41,11 @@ class SalesProposalResource extends Resource
                     ->placeholder("20")
                     ->reactive()
                     ->numeric()
-                    ->afterStateUpdated(fn ($state, callable $set) => $set('total', $state * \App\Models\Price::all()->first()->price  ?? 1))
+                    ->afterStateUpdated(fn ($state, callable $set) => $set('total', $state * $price))
                     ->required(),
                 TextInput::make('price')
                     ->label('Harga Saat Ini')
-                    ->default(\App\Models\Price::all()->first()->price ?? 1)
+                    ->default($price)
                     ->numeric()
                     ->suffix('/Kg')
                     ->readOnly(),
