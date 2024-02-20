@@ -6,6 +6,7 @@ use App\Filament\Resources\SalesProposalResource\Pages;
 use App\Filament\Resources\SalesProposalResource\RelationManagers;
 use App\Models\HistorySales;
 use App\Models\SalesProposal;
+use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -33,6 +34,7 @@ class SalesProposalResource extends Resource
         if($prices->count() == 1){
             $price = $prices->first()->price;
         }
+        $vendors = User::where('role', 'vendor')->get()->pluck('name', 'id');
         return $form
             ->schema([
                 TextInput::make('weight')
@@ -55,6 +57,12 @@ class SalesProposalResource extends Resource
                     ->default(0)
                     ->numeric()
                     ->readOnly(),
+                    Select::make('user_id')
+                    ->label('Vendor')
+                    ->options($vendors)
+                    ->hidden(fn () => auth()->user()->role == 'vendor') // Menyembunyikan dropdown jika role pengguna adalah "admin"
+                    ->required(),
+                
             ]);
     }
 

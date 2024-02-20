@@ -15,7 +15,9 @@ class CreateSalesProposal extends CreateRecord
     protected static ?string $title = "Buat Pengajuan Penjualan";
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        $data['user_id'] = auth()->user()->id;
+        if(auth()->user()->role == "vendor") {
+            $data['user_id'] = auth()->user()->id;
+        }
         return $data;
     }
 

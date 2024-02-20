@@ -1,5 +1,6 @@
 <?php
 
+use App\Filament\Pages\Dashboard;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,5 +16,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     // return redirect('/app/login');
+    dd(Dashboard::getUrl());
     return view('welcome');
 });
